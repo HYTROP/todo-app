@@ -1,41 +1,52 @@
 
-// import { Component } from "react";
+import { Component } from "react";
 
+export default class Task extends Component {
 
-export default function Task({ id, label, isDone = false }) {
+  state = {
+    isDone: false
+  };
 
-  let onCompleted = '';
-  if (isDone) {
-    onCompleted += 'completed'
+  handleIsDone = () => {
+    this.setState(({ isDone }) => ({ isDone: !isDone }))
+    // console.log('Done!')
   }
-  return (
-    <li
-      className={onCompleted}
-    // onClick={handleIsDone}
-    >
-      <div className="view">
-        <input
-          // id={id}
-          className='toggle' type="checkbox" />
-        <label>
-          <span
-            // key={id}
-            className='description'
-          // onClick={handleIsDone}
-          >
-            {label}
-          </span>
-          <span className='created'>created 5 minutes ago</span>
-          <button
-            className="icon icon-edit">
-          </button>
-          <button className="icon icon-destroy"></button>
-        </label >
-      </div >
-    </li >
+  render() {
+    const { id, label } = this.props;
+    const { isDone } = this.state;
+
+    let onCompleted = '';
+    let toggleInput = 'toggle';
+
+    if (isDone) {
+      onCompleted += 'completed'
+    }
+
+    return (
+      <li className={onCompleted} >
+        <div className="view">
+          <input
+            id={id}
+            onClick={this.handleIsDone}
+            className={toggleInput} type="checkbox" />
+          <label >
+            <span htmlFor={id}
+              className='description'
+              onClick={this.handleIsDone}
+            >
+              {label}
+            </span>
+            <span className='created'>created 5 minutes ago</span>
+            <button
+              className="icon icon-edit">
+            </button>
+            <button className="icon icon-destroy"></button>
+          </label >
+        </div >
+      </li >
+    )
+  }
 
 
-
-  )
 
 }
