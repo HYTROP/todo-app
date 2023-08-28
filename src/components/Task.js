@@ -12,7 +12,7 @@ export default class Task extends Component {
     // console.log('Done!')
   }
   render() {
-    const { id, label } = this.props;
+    const { id, label, handleOnDelete } = this.props;
     const { isDone } = this.state;
 
     let onCompleted = '';
@@ -32,7 +32,7 @@ export default class Task extends Component {
           <label >
             <span htmlFor={id}
               className='description'
-              onClick={this.handleIsDone}
+            // onClick={this.handleIsDone}
             >
               {label}
             </span>
@@ -40,7 +40,10 @@ export default class Task extends Component {
             <button
               className="icon icon-edit">
             </button>
-            <button className="icon icon-destroy"></button>
+            <button
+              className="icon icon-destroy"
+              onClick={handleOnDelete}>
+            </button>
           </label >
         </div >
       </li >

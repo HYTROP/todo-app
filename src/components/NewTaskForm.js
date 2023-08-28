@@ -5,9 +5,10 @@ export default function NewTaskForm({ setInput, addTask, inputText }) {
       <input className="new-todo" placeholder="What needs to be done?"
         autoFocus
         onChange={setInput}
+
         onKeyUp={(e) => {
           if (e.code === 'Enter') {
-            addTask(inputText)
+            addTask(console.log('PRESS!'), inputText)
           }
         }
         } />
