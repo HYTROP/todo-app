@@ -1,35 +1,26 @@
-import Task from "./Task";
 
-function TaskList() {
+// import { Component } from 'react';
+import Task from './Task';
+
+export default function TaskList({ data }) {
+
+  const elements = data.map((item) => {
+
+    const { id, ...itemProps } = item;
+    return (
+      <div key={id} >
+        <Task {...itemProps} />
+      </div>
+    )
+  })
+
+  // console.log(data)
   return (
-    <ul className="todo-list">
-      <li className="completed">
-        <div className="view">
-          <input className="toggle" type="checkbox" />
-          <label>
-            <span className="description">Completed task</span>
-            <span className="created">created 17 seconds ago</span>
-          </label>
-          <button className="icon icon-edit"></button>
-          <button className="icon icon-destroy"></button>
-        </div>
-      </li>
-      <li className="editing">
-        <div className="view">
-          <input className="toggle" type="checkbox" />
-          <label>
-            <span className="description">Editing task</span>
-            <span className="created">created 5 minutes ago</span>
-          </label>
-          <button className="icon icon-edit"></button>
-          <button className="icon icon-destroy"></button>
-        </div>
-        <input type="text" className="edit" defaultValue="Editing task" />
-      </li>
-      <Task />
+    <ul className='todo-list'>
+      {elements}
     </ul>
   )
 
+  // return <ul className="todo-list">{elements}</ul >
 }
 
-export default TaskList;

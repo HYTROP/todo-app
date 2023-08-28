@@ -1,13 +1,16 @@
-
-
-function NewTaskForm() {
+export default function NewTaskForm({ setInput, addTask, inputText }) {
 
   return (
     <header className="header">
-      <h1>todos</h1>
-      <input className="new-todo" placeholder="What needs to be done?" autoFocus />
+      <input className="new-todo" placeholder="What needs to be done?"
+        autoFocus
+        onChange={setInput}
+        onKeyUp={(e) => {
+          if (e.code === 'Enter') {
+            addTask(inputText)
+          }
+        }
+        } />
     </header>
   )
 }
-
-export default NewTaskForm;

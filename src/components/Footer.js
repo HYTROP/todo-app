@@ -1,12 +1,10 @@
-import TaskFilters from "./TasksFilter";
-function Footer() {
+import TaskFilter from "./TasksFilter";
+export default function Footer({ data }) {
   return (
     <footer className="footer">
-      <span className="todo-count">1 items left</span>
-      <TaskFilters />
+      {/* <span className="todo-count">{data.length} items left</span> */}
+      <TaskFilter />
       <button className="clear-completed">Clear completed</button>
     </footer>
   )
 }
-
-export default Footer;
