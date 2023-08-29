@@ -13,13 +13,9 @@ export default class App extends Component {
 
   state = {
     tasksData: [
-      { label: '1st Task', id: uuidv4(), isDone: false },
-      { label: '2nd Task', id: uuidv4(), isDone: false },
-      { label: '3rd Task', id: uuidv4(), isDone: false },
-    ]
+      // { label: '1st', active: false, completed: false, id: '', },
+    ],
   }
-  newId = uuidv4();
-
 
   handleOnDelete = (id) => {
     this.setState(({ tasksData }) => {
@@ -34,22 +30,21 @@ export default class App extends Component {
   handleAddTask = (inputText) => {
     const newItem = {
       label: inputText,
-      id: this.newId,
+      id: uuidv4(),
       isDone: false,
     }
-    // console.log(newItem.id)
     this.setState(({ tasksData }) => {
       const newArray = [...tasksData, newItem];
       return {
         tasksData: newArray
       }
     })
-
   }
 
+
   render() {
-    // const { handleOnDelete } = this.props;
-    // const { handleOnDelete } = this.state;
+
+    const { handleIsDoneFilter } = this.props;
 
     return (
       <section className="todoapp" >
@@ -64,10 +59,12 @@ export default class App extends Component {
             isDone
             data={this.state.tasksData}
             handleOnDelete={this.handleOnDelete}
+            addTask
           />
 
           <Footer
-          //  data={tasksData} 
+            data={this.state.tasksData}
+            handleIsDoneFilter={handleIsDoneFilter}
           />
         </section>
       </section>

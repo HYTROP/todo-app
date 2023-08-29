@@ -17,7 +17,6 @@ export default function TaskList({ data, handleOnDelete }) {
     )
   })
 
-  // console.log(data) 
   return (
     <ul className='todo-list'>
       {elements}

@@ -2,8 +2,18 @@ import { Component } from "react";
 
 export default class TaskFilters extends Component {
 
+  buttons = [
+    { name: 'All', label: 'All' },
+    { name: 'Active', label: 'Active' },
+    { name: 'Completed', label: 'Completed' },
+  ]
+
+
+
 
   render() {
+
+    const { handleIsDoneFilter } = this.props
 
 
     return (
@@ -15,7 +25,10 @@ export default class TaskFilters extends Component {
           <button>Active</button>
         </li>
         <li>
-          <button>Completed</button>
+          <button
+            onClick={handleIsDoneFilter}
+            autoFocus
+          >Completed</button>
         </li>
       </ul>
     )

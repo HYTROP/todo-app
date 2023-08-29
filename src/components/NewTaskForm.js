@@ -1,17 +1,47 @@
-export default function NewTaskForm({ setInput, addTask, inputText }) {
+import { Component } from "react"
 
-  return (
-    <header className="header">
-      <input className="new-todo" placeholder="What needs to be done?"
-        autoFocus
-        onChange={setInput}
+export default class NewTaskForm extends Component {
 
-        onKeyUp={(e) => {
-          if (e.code === 'Enter') {
-            addTask(console.log('PRESS!'), inputText)
+  state = {
+    text: ''
+  }
+
+  onValueChange = (e) => {
+    this.setState({
+      text: e.target.value
+    })
+  }
+  onAdd = () => {
+    this.props.onAdd(this.state.text)
+  }
+
+
+  render() {
+    const { addTask } = this.props;
+
+
+    return (
+      <header className="header">
+        <input className="new-todo"
+          placeholder="What needs to be done?"
+          autoFocus
+          onChange={this.onValueChange} // setInput - функция которая отслеживает и записывает в переменную то что ввел пользователь, в State
+          value={this.state.text} // контролируем элемент для ресета input
+
+          onKeyUp={(e) => {
+            if (e.code === 'Enter') {
+              addTask(e.target.value)
+              this.setState({
+                text: ''
+              })
+            }
           }
-        }
-        } />
-    </header>
-  )
+          }
+        />
+      </header>
+    )
+
+  }
+
+
 }
