@@ -1,29 +1,68 @@
 
 import { Component } from "react";
+// import { formatDistanceToNow } from 'date-fns';
+
 
 export default class Task extends Component {
 
   state = {
-    isDone: false,
+    isEditing: false,
+    editingText: '',
   };
 
   handleIsDone = () => {
     this.setState(({ isDone }) => ({ isDone: !isDone }))
   }
 
-  render() {
-    const { id, label, handleOnDelete } = this.props;
-    const { isDone } = this.state;
+  handleOnEdit = () => {
+    this.setState({
+      isEditing: !this.state.isEditing
+    })
+    // (() => this.handleEditTask)
+  }
 
-    let onCompleted = '';
+
+
+  render() {
+    const { id, label, handleOnEdit, handleOnDelete, handleEditTask } = this.props;
+    const { isDone, isEditing } = this.state;
+
+    // const currentDate = new Date(); 
+    // const createDate = new Date('1995-12-17T03:24:00'); // тут дата создания
+    // formatDistanceToNow(createDate, currentDate);
+
+    let taskClassName = '';
 
     if (isDone) {
-      onCompleted += 'completed'
+      taskClassName += 'completed'
+    }
+
+    if (isEditing) {
+      taskClassName += 'editing'
+      return (
+        <input
+          key={id}
+          type="text"
+          className="edit"
+          defaultValue={label}
+          onChange={handleOnEdit}
+          autoFocus
+          onKeyUp={(e) => {
+            if (e.code === 'Enter') {
+              handleEditTask(e.target.value)
+              this.setState({
+                isEditing: false
+              })
+            }
+          }
+          }
+        ></input>
+      )
     }
 
 
     return (
-      <li className={onCompleted} >
+      <li className={taskClassName} >
         <div className="view">
           <input
             id={id}
@@ -37,7 +76,8 @@ export default class Task extends Component {
             </span>
             <span className='created'>created 5 minutes ago</span>
             <button
-              className="icon icon-edit">
+              className="icon icon-edit"
+              onClick={this.handleOnEdit}>
             </button>
             <button
               className="icon icon-destroy"
@@ -48,7 +88,4 @@ export default class Task extends Component {
       </li >
     )
   }
-
-
-
 }

@@ -15,7 +15,9 @@ export default class App extends Component {
     tasksData: [
       // { label: '1st', active: false, completed: false, id: '', },
     ],
+    editingText: '',
   }
+
 
   handleOnDelete = (id) => {
     this.setState(({ tasksData }) => {
@@ -32,6 +34,7 @@ export default class App extends Component {
       label: inputText,
       id: uuidv4(),
       isDone: false,
+      timeStamp: Date.now()
     }
     this.setState(({ tasksData }) => {
       const newArray = [...tasksData, newItem];
@@ -41,11 +44,22 @@ export default class App extends Component {
     })
   }
 
+  handleEditTask = (editingText) => {
+    const editItem = {
+      label: editingText,
+      id: uuidv4(),
+      isDone: false,
+      timeStamp: Date.now()
+    }
+    this.setState(() => {
+      const newArray = [editItem];
+      return {
+        tasksData: newArray
+      }
+    })
+  }
 
   render() {
-
-    const { handleIsDoneFilter } = this.props;
-
     return (
       <section className="todoapp" >
         <header>
@@ -56,15 +70,17 @@ export default class App extends Component {
         </header>
         <section className="main">
           <TaskList
-            isDone
+            addTask={this.handleAddTask}
+            handleOnEdit={this.handleOnEdit}
+            handleEditTask={this.handleEditTask}
             data={this.state.tasksData}
             handleOnDelete={this.handleOnDelete}
-            addTask
           />
 
           <Footer
             data={this.state.tasksData}
-            handleIsDoneFilter={handleIsDoneFilter}
+            filter={this.state.filter}
+            handleIsDoneFilter={this.handleIsDoneFilter}
           />
         </section>
       </section>

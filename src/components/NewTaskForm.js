@@ -15,8 +15,8 @@ export default class NewTaskForm extends Component {
     this.props.onAdd(this.state.text)
   }
 
-
   render() {
+
     const { addTask } = this.props;
 
 

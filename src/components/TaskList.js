@@ -2,7 +2,7 @@
 // import { Component } from 'react';
 import Task from './Task';
 
-export default function TaskList({ data, handleOnDelete }) {
+export default function TaskList({ data, handleOnDelete, handleOnEdit, handleEditTask }) {
 
   const elements = data.map((item) => {
 
@@ -10,8 +10,11 @@ export default function TaskList({ data, handleOnDelete }) {
     return (
       <div key={id} >
         <Task {...itemProps}
+          data
           handleOnDelete={() => handleOnDelete(id)}
           addTask
+          handleOnEdit={handleOnEdit}
+          handleEditTask={handleEditTask}
         />
       </div>
     )
@@ -22,7 +25,5 @@ export default function TaskList({ data, handleOnDelete }) {
       {elements}
     </ul>
   )
-
-  // return <ul className="todo-list">{elements}</ul >
 }
 
