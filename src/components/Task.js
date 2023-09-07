@@ -5,71 +5,43 @@ import { Component } from "react";
 
 export default class Task extends Component {
 
-  state = {
-    isEditing: false,
-    editingText: '',
-  };
+  // state = {
+  //   isDone: false,
+  //   isEditing: false,
+  //   editingText: '',
+  // };
 
-  handleIsDone = () => {
-    this.setState(({ isDone }) => ({ isDone: !isDone }))
-  }
-
-  handleOnEdit = () => {
-    this.setState({
-      isEditing: !this.state.isEditing
-    })
-    // (() => this.handleEditTask)
-  }
-
-
+  // handleIsDone = () => {
+  //   this.setState(({ isDone }) => ({ isDone: !isDone }))
+  // }
 
   render() {
-    const { id, label, handleOnEdit, handleOnDelete, handleEditTask } = this.props;
-    const { isDone, isEditing } = this.state;
+    const { id, label,
+      handleOnEdit,
+      handleOnDelete,
+      handleIsDone,
+      isDone
+    } = this.props;
 
     // const currentDate = new Date(); 
     // const createDate = new Date('1995-12-17T03:24:00'); // тут дата создания
     // formatDistanceToNow(createDate, currentDate);
-
-    let taskClassName = '';
-
-    if (isDone) {
-      taskClassName += 'completed'
-    }
-
-    if (isEditing) {
-      taskClassName += 'editing'
-      return (
-        <input
-          key={id}
-          type="text"
-          className="edit"
-          defaultValue={label}
-          onChange={handleOnEdit}
-          autoFocus
-          onKeyUp={(e) => {
-            if (e.code === 'Enter') {
-              handleEditTask(e.target.value)
-              this.setState({
-                isEditing: false
-              })
-            }
-          }
-          }
-        ></input>
-      )
-    }
-
+    // console.log(isDone)
 
     return (
-      <li className={taskClassName} >
+      <li
+        className={!isDone ? 'view' : 'completed'} >
         <div className="view">
           <input
             id={id}
-            onClick={this.handleIsDone}
+            onChange={() => {
+              handleIsDone(id)
+            }}
+
             className='toggle' type="checkbox" />
-          <label >
-            <span htmlFor={id}
+          <label
+          >
+            <span
               className='description'
             >
               {label}
@@ -77,7 +49,8 @@ export default class Task extends Component {
             <span className='created'>created 5 minutes ago</span>
             <button
               className="icon icon-edit"
-              onClick={this.handleOnEdit}>
+              onClick={handleOnEdit}
+            >
             </button>
             <button
               className="icon icon-destroy"

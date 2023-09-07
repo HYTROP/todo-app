@@ -1,10 +1,12 @@
 import TaskFilter from "./TasksFilter";
 
-export default function Footer({ data, handleIsDoneFilter }) {
+export default function Footer({ handleIsDoneFilter, todoCount }) {
+
+
 
   return (
     <footer className="footer">
-      <span className="todo-count">{data.length} items left</span>
+      <span className="todo-count">{todoCount} items left</span>
       <TaskFilter
         handleIsDoneFilter={handleIsDoneFilter}
       />

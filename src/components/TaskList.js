@@ -2,19 +2,27 @@
 // import { Component } from 'react';
 import Task from './Task';
 
-export default function TaskList({ data, handleOnDelete, handleOnEdit, handleEditTask }) {
+export default function TaskList({ data,
+  handleOnDelete,
+  handleOnEdit,
+  handleEditTask,
+  handleIsDone,
+  taskClassName }) {
 
   const elements = data.map((item) => {
 
-    const { id, ...itemProps } = item;
+    // const { id, ...itemProps } = item; 
     return (
-      <div key={id} >
-        <Task {...itemProps}
+      <div key={item.id} >
+        <Task {...item}
+          taskClassName={taskClassName}
           data
-          handleOnDelete={() => handleOnDelete(id)}
+          handleOnDelete={() => handleOnDelete(item.id)}
           addTask
+          isDone={item.isDone}
+          handleIsDone={handleIsDone}
           handleOnEdit={handleOnEdit}
-          handleEditTask={handleEditTask}
+        // handleEditTask={handleEditTask}
         />
       </div>
     )
