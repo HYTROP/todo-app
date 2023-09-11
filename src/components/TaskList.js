@@ -11,20 +11,20 @@ export default function TaskList({ data,
 
   const elements = data.map((item) => {
 
-    // const { id, ...itemProps } = item; 
     return (
-      <div key={item.id} >
-        <Task {...item}
-          taskClassName={taskClassName}
-          data
-          handleOnDelete={() => handleOnDelete(item.id)}
-          addTask
-          isDone={item.isDone}
-          handleIsDone={handleIsDone}
-          handleOnEdit={handleOnEdit}
-        // handleEditTask={handleEditTask}
-        />
-      </div>
+      // <div key={item.id} >
+      <Task {...item} key={item.id}
+        taskClassName={taskClassName}
+        data
+        handleOnDelete={() => handleOnDelete(item.id)}
+        addTask
+        isDone={item.isDone}
+        handleIsDone={handleIsDone}
+        handleEditTask={handleEditTask}
+        handleOnEdit={handleOnEdit}
+        isEditing={item.isEditing}
+      />
+      // </div>
     )
   })
 

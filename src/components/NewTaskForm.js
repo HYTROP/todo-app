@@ -11,9 +11,6 @@ export default class NewTaskForm extends Component {
       text: e.target.value
     })
   }
-  onAdd = () => {
-    this.props.onAdd(this.state.text)
-  }
 
   render() {
 

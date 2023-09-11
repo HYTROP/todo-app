@@ -5,32 +5,46 @@ import { Component } from "react";
 
 export default class Task extends Component {
 
-  // state = {
-  //   isDone: false,
-  //   isEditing: false,
-  //   editingText: '',
-  // };
 
-  // handleIsDone = () => {
-  //   this.setState(({ isDone }) => ({ isDone: !isDone }))
-  // }
 
   render() {
     const { id, label,
       handleOnEdit,
       handleOnDelete,
       handleIsDone,
-      isDone
+      isDone,
+      isEditing,
+      handleEditTask
     } = this.props;
 
-    // const currentDate = new Date(); 
-    // const createDate = new Date('1995-12-17T03:24:00'); // тут дата создания
-    // formatDistanceToNow(createDate, currentDate);
-    // console.log(isDone)
+    // const { taskClassName } = this.state;
+
+    if (isEditing) {
+      this.taskClassName += 'editing'
+      return (
+        <input
+          key={id}
+          type="text"
+          className="edit"
+          value={label}
+          onChange={handleOnEdit}
+          autoFocus
+          onKeyUp={(e) => {
+            if (e.code === 'Enter') {
+              handleEditTask(e.target.value)
+              this.setState({
+                isEditing: false
+              })
+            }
+          }
+          }
+        ></input>
+      )
+    }
 
     return (
       <li
-        className={!isDone ? 'view' : 'completed'} >
+        className={!isDone ? '' : 'completed'} >
         <div className="view">
           <input
             id={id}
@@ -49,7 +63,7 @@ export default class Task extends Component {
             <span className='created'>created 5 minutes ago</span>
             <button
               className="icon icon-edit"
-              onClick={handleOnEdit}
+              onClick={() => { handleOnEdit(id) }}
             >
             </button>
             <button
