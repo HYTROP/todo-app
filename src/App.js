@@ -1,5 +1,4 @@
-// import { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 
 import NewTaskForm from './components/NewTaskForm';
 import TaskList from './components/TaskList';
@@ -12,14 +11,10 @@ import { Component } from 'react';
 export default class App extends Component {
 
   state = {
-    tasksData: [
-      {
-        label: '1st', id: '', isDone: false,
-        isEditing: false,
-      },
-    ],
-    editingText: 'try to edit',
+    tasksData: [],
+    newValue: '',
     taskClassName: '',
+    filter: 'all'
   }
 
   handleIsDone = (id) => {
@@ -49,11 +44,15 @@ export default class App extends Component {
   }
 
   handleAddTask = (inputText) => {
+    if (inputText.length === 0) {
+      return false
+    }
     const newItem = {
       label: inputText,
       id: uuidv4(),
       isDone: false,
-      timeStamp: Date.now()
+      isEditing: false,
+      timeStamp: new Date(),
     }
     this.setState(({ tasksData }) => {
       const newArray = [...tasksData, newItem];
@@ -66,49 +65,68 @@ export default class App extends Component {
   handleOnEdit = (id) => {
     this.setState(prevState => ({
       tasksData: prevState.tasksData.map(task => {
-        console.log(id)
         if (task.id === id) {
           return {
             ...task,
-            isEditing: !task.isEditing
+            isEditing: !task.isEditing,
           };
         } else {
-          return task;
+          return {
+            ...task,
+          };
         }
       })
     }));
   }
 
-  handleEditTask = (inputText, id) => {
-    // console.log(inputText, id)
-    const editItem = {
-      label: inputText,
-      id: uuidv4(),
-      isDone: false,
-      // timeStamp: Date.now()
-    }
+  handleEditTask = (newLabel, id) => {
     this.setState(prevState => ({
       tasksData: prevState.tasksData.map(task => {
-        console.log(id)
         if (task.id === id) {
           return {
             ...task,
-            editItem
-          }
+            label: newLabel,
+            isEditing: false,
+          };
         } else {
-          return editItem
+          return {
+            ...task,
+          };
         }
       })
-    })
-    )
+    }));
   }
 
+  handleFilter = (name) => {
+    this.setState(() => ({
+      filter: name
+    }))
+  }
+
+  getFilteredTasks = () => {
+    const { filter, tasksData } = this.state;
+    if (filter === 'all') {
+      return tasksData
+    } else if (filter === 'active') {
+      return tasksData.filter((e) => !e.isDone)
+    } else if (filter === 'completed') {
+      return tasksData.filter((e) => e.isDone)
+    }
+  }
+
+  handlerClearCompleted = () => {
+    this.setState(({ tasksData }) => {
+      const index = tasksData.filter((el) => !el.isDone)
+      return {
+        tasksData: index
+      }
+    })
+  }
 
 
   render() {
 
     const { tasksData, taskClassName } = this.state;
-
     const doneCount = tasksData.filter((el) => el.isDone).length;
     const todoCount = tasksData.length - doneCount;
 
@@ -122,7 +140,7 @@ export default class App extends Component {
         </header>
         <section className="main">
           <TaskList
-            data={tasksData}
+            data={this.getFilteredTasks()}
             isEditing
             handleIsDone={this.handleIsDone}
             taskClassName={taskClassName}
@@ -135,8 +153,8 @@ export default class App extends Component {
           <Footer
             todoCount={todoCount}
             data={this.state.tasksData}
-            filter={this.state.filter}
-            handleIsDoneFilter={this.handleIsDoneFilter}
+            handleFilter={this.handleFilter}
+            handlerClearCompleted={this.handlerClearCompleted}
           />
         </section>
       </section>

@@ -1,46 +1,48 @@
 
 import { Component } from "react";
-// import { formatDistanceToNow } from 'date-fns';
-
+import { formatDistanceToNow } from 'date-fns';
 
 export default class Task extends Component {
 
+  onValueChange = (e) => {
+    this.setState({
+      newValue: e.target.value
+    })
+  }
 
 
   render() {
     const { id, label,
+      timeStamp,
       handleOnEdit,
       handleOnDelete,
       handleIsDone,
       isDone,
       isEditing,
-      handleEditTask
+      handleEditTask,
+      onValueChange
     } = this.props;
 
-    // const { taskClassName } = this.state;
-
     if (isEditing) {
-      this.taskClassName += 'editing'
+      this.taskClassName = 'editing'
       return (
         <input
-          key={id}
+          id={id}
           type="text"
           className="edit"
-          value={label}
-          onChange={handleOnEdit}
+          defaultValue={label}
+          onChange={onValueChange}
           autoFocus
           onKeyUp={(e) => {
             if (e.code === 'Enter') {
-              handleEditTask(e.target.value)
-              this.setState({
-                isEditing: false
-              })
+              handleEditTask(e.target.value, id)
             }
           }
           }
         ></input>
       )
     }
+
 
     return (
       <li
@@ -51,19 +53,24 @@ export default class Task extends Component {
             onChange={() => {
               handleIsDone(id)
             }}
-
-            className='toggle' type="checkbox" />
-          <label
+            className='toggle' type="checkbox"
+            checked={isDone}
+          />
+          <label id={id}
           >
             <span
               className='description'
             >
               {label}
             </span>
-            <span className='created'>created 5 minutes ago</span>
+            <span className='created'
+
+            >
+              created {formatDistanceToNow(timeStamp, { includeSeconds: true })}
+            </span>
             <button
               className="icon icon-edit"
-              onClick={() => { handleOnEdit(id) }}
+              onClick={() => { handleOnEdit(id, label) }}
             >
             </button>
             <button
