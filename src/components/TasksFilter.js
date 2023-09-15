@@ -1,5 +1,4 @@
 import { Component } from "react";
-
 export default class TaskFilters extends Component {
 
   buttons = [
@@ -9,34 +8,23 @@ export default class TaskFilters extends Component {
   ];
 
   render() {
-    const { handleIsDoneFilter } = this.props
-    // const buttons = this.buttons
-    // console.log(this.buttons instanceof Array)
-
+    const { handleFilter } = this.props
     const buttons = this.buttons.map(({ name, label }) => {
       return (
-        <button
-          key={name}
-          onClick={handleIsDoneFilter}
-        >{label}</button>
+        <li key={name}>
+          <button
+            key={name}
+            onClick={() => handleFilter(name)}
+          >
+            {label}
+          </button>
+        </li>
       )
     })
 
     return (
       <ul className="filters">
-        {/* <li>
-          <button className="selected">All</button>
-        </li>
-        <li>
-          <button>Active</button>
-        </li> */}
-        <li>
-          {buttons}
-          {/* <button
-            key={this.stateName}
-          // onClick={handleIsDoneFilter}
-          >Completed</button> */}
-        </li>
+        {buttons}
       </ul>
     )
   }
