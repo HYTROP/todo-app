@@ -1,18 +1,17 @@
-
-import { Component } from "react";
+import { Component } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 
 export default class Task extends Component {
-
   onValueChange = (e) => {
     this.setState({
-      newValue: e.target.value
-    })
-  }
-
+      newValue: e.target.value,
+    });
+  };
 
   render() {
-    const { id, label,
+    const {
+      id,
+      label,
       timeStamp,
       handleOnEdit,
       handleOnDelete,
@@ -20,11 +19,11 @@ export default class Task extends Component {
       isDone,
       isEditing,
       handleEditTask,
-      onValueChange
+      onValueChange,
     } = this.props;
 
     if (isEditing) {
-      this.taskClassName = 'editing'
+      this.taskClassName = 'editing';
       return (
         <input
           id={id}
@@ -35,51 +34,37 @@ export default class Task extends Component {
           autoFocus
           onKeyUp={(e) => {
             if (e.code === 'Enter') {
-              handleEditTask(e.target.value, id)
+              handleEditTask(e.target.value, id);
             }
-          }
-          }
+          }}
         ></input>
-      )
+      );
     }
-
-
     return (
-      <li
-        className={!isDone ? '' : 'completed'} >
+      <li className={!isDone ? '' : 'completed'}>
         <div className="view">
           <input
             id={id}
             onChange={() => {
-              handleIsDone(id)
+              handleIsDone(id);
             }}
-            className='toggle' type="checkbox"
+            className="toggle"
+            type="checkbox"
             checked={isDone}
           />
-          <label id={id}
-          >
-            <span
-              className='description'
-            >
-              {label}
-            </span>
-            <span className='created'
-
-            >
-              created {formatDistanceToNow(timeStamp, { includeSeconds: true })}
-            </span>
+          <label id={id}>
+            <span className="description">{label}</span>
+            <span className="created">created {formatDistanceToNow(timeStamp, { includeSeconds: true })}</span>
             <button
               className="icon icon-edit"
-              onClick={() => { handleOnEdit(id, label) }}
-            >
-            </button>
-            <button
-              className="icon icon-destroy"
-              onClick={handleOnDelete}>
-            </button>
-          </label >
-        </div >
-      </li >
-    )
+              onClick={() => {
+                handleOnEdit(id, label);
+              }}
+            ></button>
+            <button className="icon icon-destroy" onClick={handleOnDelete}></button>
+          </label>
+        </div>
+      </li>
+    );
   }
 }
