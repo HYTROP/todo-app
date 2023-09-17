@@ -32,7 +32,6 @@ export default class App extends Component {
     }));
   }
 
-
   handleOnDelete = (id) => {
     this.setState(({ tasksData }) => {
       const index = tasksData.findIndex((element) => element.id === id)
