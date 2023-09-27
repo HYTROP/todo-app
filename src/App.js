@@ -120,6 +120,14 @@ export default class App extends Component {
     });
   };
 
+  startTimer = () => {
+    this.setState({ isTimerRunning: true });
+  };
+
+  pauseTimer = () => {
+    this.setState({ isTimerRunning: false });
+  };
+
   render() {
     const { tasksData, taskClassName } = this.state;
     const doneCount = tasksData.filter((el) => el.isDone).length;
@@ -141,6 +149,8 @@ export default class App extends Component {
             handleOnEdit={this.handleOnEdit}
             handleEditTask={this.handleEditTask}
             handleOnDelete={this.handleOnDelete}
+            startTimer={this.startTimer}
+            pauseTimer={this.pauseTimer}
           />
 
           <Footer
