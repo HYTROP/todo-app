@@ -65,9 +65,10 @@ export default class Task extends Component {
             checked={isDone}
           />
           <label id={id}>
-            <span className="created">{label}</span>
-
-            {(min === 0 && sec === 0) || min < 0 || sec < 0 ? null : <Timer min={min} sec={sec} />}
+            <span className="title">{label}</span>
+            <div className="timer">
+              {(min === 0 && sec === 0) || min < 0 || sec < 0 ? null : <Timer min={min} sec={sec} />}
+            </div>
 
             <span className="description">
               created&nbsp;
