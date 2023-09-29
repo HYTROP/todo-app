@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 
 export default class Timer extends Component {
   state = {
-    min: 0,
-    sec: 0,
+    min: '',
+    sec: '',
     run: false,
   };
 
   componentDidMount() {
     const { min, sec } = this.props;
-    console.log(min, sec);
     this.setState({
       min,
       sec,
@@ -39,15 +38,15 @@ export default class Timer extends Component {
 
   tickFunc = () => {
     let { sec, min } = this.state;
-    if (sec === 0 && min === 0) {
+    if (!min && !sec) {
       clearInterval(this.Inter);
       return;
     }
     if (sec === 0) {
-      min -= 1;
+      min = min - 1;
       sec = 60;
     }
-    sec -= 1;
+    sec = sec - 1;
     this.setState({
       sec,
       min,
@@ -60,9 +59,9 @@ export default class Timer extends Component {
     return (
       <span className="description">
         <button type="button" label="play" className="icon icon-play" onClick={this.startTimer} />
-        <button type="button" label="" className="icon icon-pause" onClick={this.pauseTimer} />
+        <button type="button" label="pause" className="icon icon-pause" onClick={this.pauseTimer} />
         <span className="timer-display">
-          {(min < 10 ? '0' : '') + min}:{(sec < 10 ? '0' : '') + sec}
+          {(min < 10 ? '0' : '0') + min}:{(sec < 10 ? '0' : '') + sec}
         </span>
       </span>
     );

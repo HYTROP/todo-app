@@ -357,6 +357,19 @@ body {
   text-align: left;
 }
 
+
+.cancel-edit {
+  margin: 10px;
+  width: 30px;
+  height: 30px;
+}
+
+.cancel-edit::after {
+  content: '×';
+  font-size: 20px;
+  /* width: 140px; */
+}
+
 .todo-count strong {
   font-weight: 300;
 }
