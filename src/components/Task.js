@@ -1,17 +1,8 @@
 import { Component } from 'react';
 import { formatDistanceToNow } from 'date-fns';
+import Timer from './Timer';
 
 export default class Task extends Component {
-  state = {
-    isTimerRunnig: false,
-  };
-
-  onValueChange = (e) => {
-    this.setState({
-      newValue: e.target.value,
-    });
-  };
-
   render() {
     const {
       id,
@@ -24,12 +15,10 @@ export default class Task extends Component {
       isEditing,
       handleEditTask,
       onValueChange,
-      startTimer,
-      pauseTimer,
+      min,
+      sec,
     } = this.props;
-
-    const { isTimerRunning } = this.state;
-    const timerDisplay = isTimerRunning ? formatDistanceToNow(timeStamp, { includeSeconds: true }) : '';
+    // console.log(min, sec)
 
     if (isEditing) {
       this.taskClassName = 'editing';
@@ -76,24 +65,13 @@ export default class Task extends Component {
             checked={isDone}
           />
           <label id={id}>
-            <span className="description">{label}</span>
+            <span className="created">{label}</span>
+
+            {(min === 0 && sec === 0) || min < 0 || sec < 0 ? null : <Timer min={min} sec={sec} />}
 
             <span className="description">
-              {isTimerRunning ? (
-                <button className="icon" onClick={pauseTimer}>
-                  ⏸️
-                </button>
-              ) : (
-                <button className="icon" onClick={startTimer}>
-                  ▶️
-                </button>
-              )}
-              {timerDisplay}
-            </span>
-
-            <span className="created">
-              created &nbsp;
-              {formatDistanceToNow(timeStamp, { includeSeconds: true })}
+              created&nbsp;
+              {formatDistanceToNow(timeStamp, { includeSeconds: true })} ago
             </span>
 
             <button

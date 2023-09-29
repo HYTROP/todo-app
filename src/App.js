@@ -1,12 +1,9 @@
-import { v4 as uuidv4 } from 'uuid';
-
+import { Component } from 'react';
+import './App.css';
 import NewTaskForm from './components/NewTaskForm';
 import TaskList from './components/TaskList';
 import Footer from './components/Footer';
-
-import './App.css';
-import { Component } from 'react';
-
+import { v4 as uuidv4 } from 'uuid';
 export default class App extends Component {
   state = {
     tasksData: [],
@@ -40,12 +37,14 @@ export default class App extends Component {
     });
   };
 
-  handleAddTask = (inputText) => {
+  handleAddTask = (inputText, min, sec) => {
     if (inputText.trim() === '') {
       return false;
     }
     const newItem = {
       label: inputText,
+      min: min,
+      sec: sec,
       id: uuidv4(),
       isDone: false,
       isEditing: false,
@@ -53,6 +52,7 @@ export default class App extends Component {
     };
     this.setState(({ tasksData }) => {
       const newArray = [...tasksData, newItem];
+
       return {
         tasksData: newArray,
       };
@@ -118,14 +118,6 @@ export default class App extends Component {
         tasksData: index,
       };
     });
-  };
-
-  startTimer = () => {
-    this.setState({ isTimerRunning: true });
-  };
-
-  pauseTimer = () => {
-    this.setState({ isTimerRunning: false });
   };
 
   render() {
