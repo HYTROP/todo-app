@@ -10,7 +10,7 @@ export default class App extends Component {
     newValue: '',
     taskClassName: '',
     filter: 'all',
-    timerValue: { min: 0, sec: 0 },
+    // timerValue: { min: 0, sec: 0 },
   };
 
   handleIsDone = (id) => {
@@ -130,12 +130,10 @@ export default class App extends Component {
       this.setState({
         tasksData: newTasksData,
       });
-      console.log(newTasksData);
     }
   };
 
   render() {
-    console.log('render');
     const { tasksData, taskClassName } = this.state;
     const doneCount = tasksData.filter((el) => el.isDone).length;
     const todoCount = tasksData.length - doneCount;
@@ -157,7 +155,6 @@ export default class App extends Component {
             handleEditTask={this.handleEditTask}
             handleOnDelete={this.handleOnDelete}
             saveTimerValueById={this.saveTimerValueById}
-            timerValue={this.timerValue}
           />
 
           <Footer

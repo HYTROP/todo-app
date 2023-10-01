@@ -8,9 +8,7 @@ export default function TaskList({
   handleIsDone,
   taskClassName,
   saveTimerValueById,
-  timerValue,
 }) {
-  // console.log(data)
   const elements = data.map((item) => {
     return (
       <Task
@@ -26,7 +24,6 @@ export default function TaskList({
         isEditing={item.isEditing}
         isDone={item.isDone}
         saveTimerValueById={saveTimerValueById}
-        timerValue={timerValue}
       />
     );
   });

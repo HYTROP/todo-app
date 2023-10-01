@@ -5,7 +5,6 @@ export default class Timer extends Component {
     min: '',
     sec: '',
     run: false,
-    timerValue: { min: 0, sec: 0 },
   };
 
   componentDidMount() {
@@ -14,15 +13,6 @@ export default class Timer extends Component {
       min,
       sec,
     });
-  }
-  componentDidUpdate(prevProps, prevState) {
-    // Проверяем, изменились ли значения min и sec
-    if (prevProps.min !== this.props.min || prevProps.sec !== this.props.sec) {
-      this.setState({
-        min: this.props.min,
-        sec: this.props.sec,
-      });
-    }
   }
 
   componentWillUnmount() {
