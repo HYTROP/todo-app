@@ -1,6 +1,15 @@
 import Task from './Task';
 
-export default function TaskList({ data, handleOnDelete, handleOnEdit, handleEditTask, handleIsDone, taskClassName }) {
+export default function TaskList({
+  data,
+  handleOnDelete,
+  handleOnEdit,
+  handleEditTask,
+  handleIsDone,
+  taskClassName,
+  saveTimerValueById,
+  timerValue,
+}) {
   // console.log(data)
   const elements = data.map((item) => {
     return (
@@ -16,6 +25,8 @@ export default function TaskList({ data, handleOnDelete, handleOnEdit, handleEdi
         handleOnEdit={handleOnEdit}
         isEditing={item.isEditing}
         isDone={item.isDone}
+        saveTimerValueById={saveTimerValueById}
+        timerValue={timerValue}
       />
     );
   });

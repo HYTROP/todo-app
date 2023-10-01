@@ -5,6 +5,7 @@ export default class Timer extends Component {
     min: '',
     sec: '',
     run: false,
+    timerValue: { min: 0, sec: 0 },
   };
 
   componentDidMount() {
@@ -14,13 +15,28 @@ export default class Timer extends Component {
       sec,
     });
   }
+  componentDidUpdate(prevProps, prevState) {
+    // Проверяем, изменились ли значения min и sec
+    if (prevProps.min !== this.props.min || prevProps.sec !== this.props.sec) {
+      this.setState({
+        min: this.props.min,
+        sec: this.props.sec,
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    // Сохраняем текущее значение таймера, когда компонент размонтируется
+    const { min, sec } = this.state;
+    this.props.onTimerUnmount({ min, sec });
+  }
 
   startTimer = () => {
     const { run } = this.state;
     this.setState({
       run: true,
     });
-    if (run === false) {
+    if (!run) {
       this.Inter = setInterval(() => {
         this.tickFunc();
       }, 1000);
@@ -42,7 +58,7 @@ export default class Timer extends Component {
       clearInterval(this.Inter);
       return;
     }
-    if (sec === 0) {
+    if (sec === 0 || !sec) {
       min = min - 1;
       sec = 60;
     }

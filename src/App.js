@@ -10,6 +10,7 @@ export default class App extends Component {
     newValue: '',
     taskClassName: '',
     filter: 'all',
+    timerValue: { min: 0, sec: 0 },
   };
 
   handleIsDone = (id) => {
@@ -120,7 +121,21 @@ export default class App extends Component {
     });
   };
 
+  saveTimerValueById = (id, min, sec) => {
+    const newTasksData = [...this.state.tasksData];
+    const index = this.state.tasksData.findIndex((e) => e.id === id);
+    if (index !== -1) {
+      newTasksData[index].min = min;
+      newTasksData[index].sec = sec;
+      this.setState({
+        tasksData: newTasksData,
+      });
+      console.log(newTasksData);
+    }
+  };
+
   render() {
+    console.log('render');
     const { tasksData, taskClassName } = this.state;
     const doneCount = tasksData.filter((el) => el.isDone).length;
     const todoCount = tasksData.length - doneCount;
@@ -129,7 +144,7 @@ export default class App extends Component {
       <section className="todoapp">
         <header>
           <h1>ToDos</h1>
-          <NewTaskForm addTask={this.handleAddTask} />
+          <NewTaskForm addTask={this.handleAddTask} timerValue={this.state.timerValue} />
         </header>
         <section className="main">
           <TaskList
@@ -141,8 +156,8 @@ export default class App extends Component {
             handleOnEdit={this.handleOnEdit}
             handleEditTask={this.handleEditTask}
             handleOnDelete={this.handleOnDelete}
-            startTimer={this.startTimer}
-            pauseTimer={this.pauseTimer}
+            saveTimerValueById={this.saveTimerValueById}
+            timerValue={this.timerValue}
           />
 
           <Footer

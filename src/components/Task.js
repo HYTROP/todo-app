@@ -17,8 +17,8 @@ export default class Task extends Component {
       onValueChange,
       min,
       sec,
+      saveTimerValueById,
     } = this.props;
-    // console.log(min, sec)
 
     if (isEditing) {
       this.taskClassName = 'editing';
@@ -52,6 +52,10 @@ export default class Task extends Component {
       );
     }
 
+    const onTimerUnmount = ({ min, sec }) => {
+      saveTimerValueById(id, min, sec);
+    };
+
     return (
       <li className={!isDone ? '' : 'completed'}>
         <div className="view">
@@ -67,7 +71,9 @@ export default class Task extends Component {
           <label id={id}>
             <span className="title">{label}</span>
             <div className="timer">
-              {(min === 0 && sec === 0) || min < 0 || sec < 0 ? null : <Timer min={min} sec={sec} />}
+              {(min === 0 && sec === 0) || min < 0 || sec < 0 ? null : (
+                <Timer min={min} sec={sec} onTimerUnmount={onTimerUnmount} />
+              )}
             </div>
 
             <span className="description">
