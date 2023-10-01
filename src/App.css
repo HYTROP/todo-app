@@ -117,8 +117,12 @@ body {
   box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
 }
 
+.timer-display {
+  margin: 7px;
+}
+
 .new-todo {
-  width: 70%;
+  width: 100%;
 }
 
 .new-todo-form .new-todo-form__timer {
