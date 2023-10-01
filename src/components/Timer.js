@@ -61,7 +61,7 @@ export default class Timer extends Component {
         <button type="button" label="play" className="icon icon-play" onClick={this.startTimer} />
         <button type="button" label="pause" className="icon icon-pause" onClick={this.pauseTimer} />
         <span className="timer-display">
-          {(min < 10 ? '0' : '0') + min}:{(sec < 10 ? '0' : '') + sec}
+          {(min < 10 ? '0' : '') + min}:{(sec < 10 ? '0' : '') + sec}
         </span>
       </span>
     );
