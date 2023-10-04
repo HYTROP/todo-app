@@ -16,7 +16,6 @@ export default class Timer extends Component {
   }
 
   componentWillUnmount() {
-    // Сохраняем текущее значение таймера, когда компонент размонтируется
     const { min, sec } = this.state;
     this.props.onTimerUnmount({ min, sec });
   }
