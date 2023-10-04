@@ -5,23 +5,7 @@ export default class NewTaskForm extends Component {
     text: '',
     min: '',
     sec: '',
-    // timerValue: { min: '', sec: '' },
   };
-
-  // componentDidMount() {
-  //   const { min, sec } = this.state.timerValue;
-  //   this.setState({
-  //     min, sec
-  //   })
-  // }
-  // componentWillUnmount() {
-  //   const { min, sec } = this.state;
-  //   this.setState((prevState) => ({
-  //     timerValue: {
-  //       ...prevState.timerValue, min, sec
-  //     }
-  //   }))
-  // }
 
   onValueChange = (e) => {
     this.setState({
