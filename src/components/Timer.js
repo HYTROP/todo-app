@@ -38,15 +38,9 @@ export default class Timer extends Component {
   }
 
   startTimer = () => {
-    // const { run } = this.state;
-    // this.setState({
-    //   run: true,
-    // });
-    // if (!run) {
     this.Inter = setInterval(() => {
       this.tickFunc();
     }, 1000);
-    // }
   };
 
   pauseTimer = () => {
@@ -64,7 +58,7 @@ export default class Timer extends Component {
       this.pauseTimer();
       return;
     }
-    console.log(sec, min);
+
     if (sec === 0 || !sec) {
       min = min - 1;
       sec = 60;
