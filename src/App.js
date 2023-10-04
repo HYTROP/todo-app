@@ -10,7 +10,6 @@ export default class App extends Component {
     newValue: '',
     taskClassName: '',
     filter: 'all',
-    // timerValue: { min: 0, sec: 0 },
   };
 
   handleIsDone = (id) => {
