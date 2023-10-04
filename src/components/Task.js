@@ -18,6 +18,7 @@ export default class Task extends Component {
       min,
       sec,
       saveTimerValueById,
+      stopTimerDate,
     } = this.props;
 
     if (isEditing) {
@@ -52,8 +53,8 @@ export default class Task extends Component {
       );
     }
 
-    const onTimerUnmount = ({ min, sec }) => {
-      saveTimerValueById(id, min, sec);
+    const onTimerUnmount = ({ min, sec, stopTimerDate }) => {
+      saveTimerValueById(id, min, sec, stopTimerDate);
     };
 
     return (
@@ -72,7 +73,7 @@ export default class Task extends Component {
             <span className="title">{label}</span>
             <div className="timer">
               {(min === 0 && sec === 0) || min < 0 || sec < 0 ? null : (
-                <Timer min={min} sec={sec} onTimerUnmount={onTimerUnmount} />
+                <Timer min={min} sec={sec} onTimerUnmount={onTimerUnmount} stopTimerDate={stopTimerDate} />
               )}
             </div>
 

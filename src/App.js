@@ -10,7 +10,6 @@ export default class App extends Component {
     newValue: '',
     taskClassName: '',
     filter: 'all',
-    // timerValue: { min: 0, sec: 0 },
   };
 
   handleIsDone = (id) => {
@@ -50,6 +49,7 @@ export default class App extends Component {
       isDone: false,
       isEditing: false,
       timeStamp: new Date(),
+      stopTimerDate: '',
     };
     this.setState(({ tasksData }) => {
       const newArray = [...tasksData, newItem];
@@ -121,12 +121,13 @@ export default class App extends Component {
     });
   };
 
-  saveTimerValueById = (id, min, sec) => {
+  saveTimerValueById = (id, min, sec, stopTimerDate) => {
     const newTasksData = [...this.state.tasksData];
     const index = this.state.tasksData.findIndex((e) => e.id === id);
     if (index !== -1) {
       newTasksData[index].min = min;
       newTasksData[index].sec = sec;
+      newTasksData[index].stopTimerDate = stopTimerDate;
       this.setState({
         tasksData: newTasksData,
       });

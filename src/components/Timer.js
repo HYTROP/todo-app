@@ -8,16 +8,32 @@ export default class Timer extends Component {
   };
 
   componentDidMount() {
-    const { min, sec } = this.props;
-    this.setState({
-      min,
-      sec,
-    });
+    const { min, sec, stopTimerDate } = this.props;
+    if (stopTimerDate) {
+      const diffDate = new Date(Date.now() - stopTimerDate);
+      const diffMin = diffDate.getMinutes();
+      const diffSec = diffDate.getSeconds();
+      this.setState({
+        run: true,
+        min: min - diffMin,
+        sec: sec - diffSec,
+      });
+      this.startTimer();
+    } else {
+      this.setState({
+        min,
+        sec,
+      });
+    }
   }
 
   componentWillUnmount() {
     const { min, sec } = this.state;
-    this.props.onTimerUnmount({ min, sec });
+    this.props.onTimerUnmount({
+      min,
+      sec,
+      stopTimerDate: this.state.run ? Date.now() : '',
+    });
   }
 
   startTimer = () => {
