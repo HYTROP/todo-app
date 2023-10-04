@@ -1,44 +1,78 @@
-import { Component } from "react"
+import { Component } from 'react';
 
 export default class NewTaskForm extends Component {
-
   state = {
-    text: ''
-  }
+    text: '',
+    min: '',
+    sec: '',
+    stopTimerDate: '',
+  };
 
   onValueChange = (e) => {
     this.setState({
-      text: e.target.value
-    })
-  }
+      text: e.target.value,
+    });
+  };
+
+  onMinChange = (e) => {
+    this.setState({
+      min: e.target.value,
+    });
+  };
+
+  onSecChange = (e) => {
+    this.setState({
+      sec: e.target.value,
+    });
+  };
+
+  handleFormSubmit = (e) => {
+    e.preventDefault();
+    const { addTask } = this.props;
+    const { text, min, sec } = this.state;
+
+    addTask(text, Number(min), Number(sec));
+    this.setState({
+      text: '',
+      min: '',
+      sec: '',
+      stopTimerDate: '',
+    });
+  };
 
   render() {
-
-    const { addTask } = this.props;
-
+    const { text, min, sec } = this.state;
 
     return (
       <header className="header">
-        <input className="new-todo"
-          placeholder="What needs to be done?"
-          autoFocus
-          onChange={this.onValueChange} // setInput - функция которая отслеживает и записывает в переменную то что ввел пользователь, в State
-          value={this.state.text} // контролируем элемент для ресета input
+        <form onSubmit={this.handleFormSubmit}>
+          <input
+            className="new-todo"
+            placeholder="What needs to be done?"
+            autoFocus
+            onChange={this.onValueChange}
+            value={text}
+          />
 
-          onKeyUp={(e) => {
-            if (e.code === 'Enter') {
-              addTask(e.target.value)
-              this.setState({
-                text: ''
-              })
-            }
-          }
-          }
-        />
+          <input
+            type="number"
+            className="new-todo-form__timer"
+            placeholder="Min"
+            value={min}
+            onChange={this.onMinChange}
+          />
+
+          <input
+            type="number"
+            className="new-todo-form__timer"
+            placeholder="Sec"
+            value={sec}
+            onChange={this.onSecChange}
+          />
+
+          <button type="submit" hidden />
+        </form>
       </header>
-    )
-
+    );
   }
-
-
 }

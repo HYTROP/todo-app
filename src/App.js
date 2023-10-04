@@ -1,12 +1,9 @@
-import { v4 as uuidv4 } from 'uuid';
-
+import { Component } from 'react';
+import './App.css';
 import NewTaskForm from './components/NewTaskForm';
 import TaskList from './components/TaskList';
 import Footer from './components/Footer';
-
-import './App.css';
-import { Component } from 'react';
-
+import { v4 as uuidv4 } from 'uuid';
 export default class App extends Component {
   state = {
     tasksData: [],
@@ -40,19 +37,23 @@ export default class App extends Component {
     });
   };
 
-  handleAddTask = (inputText) => {
+  handleAddTask = (inputText, min, sec) => {
     if (inputText.trim() === '') {
       return false;
     }
     const newItem = {
       label: inputText,
+      min: min,
+      sec: sec,
       id: uuidv4(),
       isDone: false,
       isEditing: false,
       timeStamp: new Date(),
+      stopTimerDate: '',
     };
     this.setState(({ tasksData }) => {
       const newArray = [...tasksData, newItem];
+
       return {
         tasksData: newArray,
       };
@@ -120,6 +121,19 @@ export default class App extends Component {
     });
   };
 
+  saveTimerValueById = (id, min, sec, stopTimerDate) => {
+    const newTasksData = [...this.state.tasksData];
+    const index = this.state.tasksData.findIndex((e) => e.id === id);
+    if (index !== -1) {
+      newTasksData[index].min = min;
+      newTasksData[index].sec = sec;
+      newTasksData[index].stopTimerDate = stopTimerDate;
+      this.setState({
+        tasksData: newTasksData,
+      });
+    }
+  };
+
   render() {
     const { tasksData, taskClassName } = this.state;
     const doneCount = tasksData.filter((el) => el.isDone).length;
@@ -129,7 +143,7 @@ export default class App extends Component {
       <section className="todoapp">
         <header>
           <h1>ToDos</h1>
-          <NewTaskForm addTask={this.handleAddTask} />
+          <NewTaskForm addTask={this.handleAddTask} timerValue={this.state.timerValue} />
         </header>
         <section className="main">
           <TaskList
@@ -141,6 +155,7 @@ export default class App extends Component {
             handleOnEdit={this.handleOnEdit}
             handleEditTask={this.handleEditTask}
             handleOnDelete={this.handleOnDelete}
+            saveTimerValueById={this.saveTimerValueById}
           />
 
           <Footer

@@ -1,13 +1,8 @@
 import { Component } from 'react';
 import { formatDistanceToNow } from 'date-fns';
+import Timer from './Timer';
 
 export default class Task extends Component {
-  onValueChange = (e) => {
-    this.setState({
-      newValue: e.target.value,
-    });
-  };
-
   render() {
     const {
       id,
@@ -20,26 +15,48 @@ export default class Task extends Component {
       isEditing,
       handleEditTask,
       onValueChange,
+      min,
+      sec,
+      saveTimerValueById,
+      stopTimerDate,
     } = this.props;
 
     if (isEditing) {
       this.taskClassName = 'editing';
       return (
-        <input
-          id={id}
-          type="text"
-          className="edit"
-          defaultValue={label}
-          onChange={onValueChange}
-          autoFocus
-          onKeyUp={(e) => {
-            if (e.code === 'Enter') {
-              handleEditTask(e.target.value, id);
-            }
-          }}
-        ></input>
+        <>
+          <input
+            id={id}
+            type="edit"
+            className="edit"
+            defaultValue={label}
+            onChange={onValueChange}
+            autoFocus
+            onKeyUp={(e) => {
+              if (e.code === 'Enter') {
+                handleEditTask(e.target.value, id);
+              }
+            }}
+            style={{ width: 500 }}
+          ></input>
+
+          <button
+            type="button"
+            className="cancel-edit"
+            onClick={() => {
+              this.setState(() => {
+                handleEditTask(label, id);
+              });
+            }}
+          ></button>
+        </>
       );
     }
+
+    const onTimerUnmount = ({ min, sec, stopTimerDate }) => {
+      saveTimerValueById(id, min, sec, stopTimerDate);
+    };
+
     return (
       <li className={!isDone ? '' : 'completed'}>
         <div className="view">
@@ -53,8 +70,18 @@ export default class Task extends Component {
             checked={isDone}
           />
           <label id={id}>
-            <span className="description">{label}</span>
-            <span className="created">created {formatDistanceToNow(timeStamp, { includeSeconds: true })}</span>
+            <span className="title">{label}</span>
+            <div className="timer">
+              {(min === 0 && sec === 0) || min < 0 || sec < 0 ? null : (
+                <Timer min={min} sec={sec} onTimerUnmount={onTimerUnmount} stopTimerDate={stopTimerDate} />
+              )}
+            </div>
+
+            <span className="description">
+              created&nbsp;
+              {formatDistanceToNow(timeStamp, { includeSeconds: true })} ago
+            </span>
+
             <button
               className="icon icon-edit"
               onClick={() => {
