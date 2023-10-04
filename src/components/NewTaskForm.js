@@ -5,6 +5,7 @@ export default class NewTaskForm extends Component {
     text: '',
     min: '',
     sec: '',
+    stopTimerDate: '',
   };
 
   onValueChange = (e) => {
@@ -30,11 +31,12 @@ export default class NewTaskForm extends Component {
     const { addTask } = this.props;
     const { text, min, sec } = this.state;
 
-    addTask(text, min, sec);
+    addTask(text, Number(min), Number(sec));
     this.setState({
       text: '',
       min: '',
       sec: '',
+      stopTimerDate: '',
     });
   };
 

@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import { Component } from 'react';
 import './App.css';
 import NewTaskForm from './components/NewTaskForm';
 import TaskList from './components/TaskList';
 import Footer from './components/Footer';
 import { v4 as uuidv4 } from 'uuid';
+export default class App extends Component {
+  state = {
+    tasksData: [],
+    newValue: '',
+    taskClassName: '',
+    filter: 'all',
+  };
 
-export default function App() {
-  const [tasksData, setTaskData] = useState([]);
-  const [newValue, setNewValue] = useState('');
-  const [taskClassName, setTaskClassName] = useState('');
-  const [filter, setFilter] = useState('all');
-
-  const handleIsDone = (id) => {
+  handleIsDone = (id) => {
     this.setState((prevState) => ({
       tasksData: prevState.tasksData.map((task) => {
         if (task.id === id) {
@@ -26,7 +27,7 @@ export default function App() {
     }));
   };
 
-  const handleOnDelete = (id) => {
+  handleOnDelete = (id) => {
     this.setState(({ tasksData }) => {
       const index = tasksData.findIndex((element) => element.id === id);
       const newArray = [...tasksData.slice(0, index), ...tasksData.slice(index + 1)];
@@ -36,7 +37,7 @@ export default function App() {
     });
   };
 
-  const handleAddTask = (inputText, min, sec) => {
+  handleAddTask = (inputText, min, sec) => {
     if (inputText.trim() === '') {
       return false;
     }
@@ -48,6 +49,7 @@ export default function App() {
       isDone: false,
       isEditing: false,
       timeStamp: new Date(),
+      stopTimerDate: '',
     };
     this.setState(({ tasksData }) => {
       const newArray = [...tasksData, newItem];
@@ -58,7 +60,7 @@ export default function App() {
     });
   };
 
-  const handleOnEdit = (id) => {
+  handleOnEdit = (id) => {
     this.setState((prevState) => ({
       tasksData: prevState.tasksData.map((task) => {
         if (task.id === id) {
@@ -75,7 +77,7 @@ export default function App() {
     }));
   };
 
-  const handleEditTask = (newLabel, id) => {
+  handleEditTask = (newLabel, id) => {
     this.setState((prevState) => ({
       tasksData: prevState.tasksData.map((task) => {
         if (task.id === id) {
@@ -93,13 +95,13 @@ export default function App() {
     }));
   };
 
-  const handleFilter = (name) => {
+  handleFilter = (name) => {
     this.setState(() => ({
       filter: name,
     }));
   };
 
-  const getFilteredTasks = () => {
+  getFilteredTasks = () => {
     const { filter, tasksData } = this.state;
     if (filter === 'all') {
       return tasksData;
@@ -110,7 +112,7 @@ export default function App() {
     }
   };
 
-  const handlerClearCompleted = () => {
+  handlerClearCompleted = () => {
     this.setState(({ tasksData }) => {
       const index = tasksData.filter((el) => !el.isDone);
       return {
@@ -119,48 +121,51 @@ export default function App() {
     });
   };
 
-  const saveTimerValueById = (id, min, sec) => {
+  saveTimerValueById = (id, min, sec, stopTimerDate) => {
     const newTasksData = [...this.state.tasksData];
     const index = this.state.tasksData.findIndex((e) => e.id === id);
     if (index !== -1) {
       newTasksData[index].min = min;
       newTasksData[index].sec = sec;
+      newTasksData[index].stopTimerDate = stopTimerDate;
       this.setState({
         tasksData: newTasksData,
       });
     }
   };
 
-  // const { tasksData, taskClassName } = this.state;
-  const doneCount = tasksData.filter((el) => el.isDone).length;
-  const todoCount = tasksData.length - doneCount;
+  render() {
+    const { tasksData, taskClassName } = this.state;
+    const doneCount = tasksData.filter((el) => el.isDone).length;
+    const todoCount = tasksData.length - doneCount;
 
-  return (
-    <section className="todoapp">
-      <header>
-        <h1>ToDos</h1>
-        <NewTaskForm addTask={handleAddTask} timerValue={this.state.timerValue} />
-      </header>
-      <section className="main">
-        <TaskList
-          data={this.getFilteredTasks()}
-          isEditing
-          handleIsDone={handleIsDone}
-          taskClassName={taskClassName}
-          addTask={this.handleAddTask}
-          handleOnEdit={this.handleOnEdit}
-          handleEditTask={this.handleEditTask}
-          handleOnDelete={this.handleOnDelete}
-          saveTimerValueById={this.saveTimerValueById}
-        />
+    return (
+      <section className="todoapp">
+        <header>
+          <h1>ToDos</h1>
+          <NewTaskForm addTask={this.handleAddTask} timerValue={this.state.timerValue} />
+        </header>
+        <section className="main">
+          <TaskList
+            data={this.getFilteredTasks()}
+            isEditing
+            handleIsDone={this.handleIsDone}
+            taskClassName={taskClassName}
+            addTask={this.handleAddTask}
+            handleOnEdit={this.handleOnEdit}
+            handleEditTask={this.handleEditTask}
+            handleOnDelete={this.handleOnDelete}
+            saveTimerValueById={this.saveTimerValueById}
+          />
 
-        <Footer
-          todoCount={todoCount}
-          data={this.state.tasksData}
-          handleFilter={this.handleFilter}
-          handlerClearCompleted={this.handlerClearCompleted}
-        />
+          <Footer
+            todoCount={todoCount}
+            data={this.state.tasksData}
+            handleFilter={this.handleFilter}
+            handlerClearCompleted={this.handlerClearCompleted}
+          />
+        </section>
       </section>
-    </section>
-  );
+    );
+  }
 }

@@ -2,35 +2,45 @@ import React, { Component } from 'react';
 
 export default class Timer extends Component {
   state = {
-    min: '',
-    sec: '',
+    min: 0,
+    sec: 0,
     run: false,
   };
 
   componentDidMount() {
-    const { min, sec } = this.props;
-    this.setState({
-      min,
-      sec,
-    });
+    const { min, sec, stopTimerDate } = this.props;
+    if (stopTimerDate && (min || sec)) {
+      const diffDate = new Date(Date.now() - stopTimerDate);
+      const diffMin = diffDate.getMinutes();
+      const diffSec = diffDate.getSeconds();
+      this.setState({
+        run: true,
+        min: Math.max(min - diffMin, 0),
+        sec: Math.max(sec - diffSec, 0),
+      });
+      this.startTimer();
+    } else {
+      this.setState({
+        min,
+        sec,
+      });
+    }
   }
 
   componentWillUnmount() {
-    // Сохраняем текущее значение таймера, когда компонент размонтируется
     const { min, sec } = this.state;
-    this.props.onTimerUnmount({ min, sec });
+    clearInterval(this.Inter);
+    this.props.onTimerUnmount({
+      min,
+      sec,
+      stopTimerDate: this.state.run ? Date.now() : '',
+    });
   }
 
   startTimer = () => {
-    const { run } = this.state;
-    this.setState({
-      run: true,
-    });
-    if (!run) {
-      this.Inter = setInterval(() => {
-        this.tickFunc();
-      }, 1000);
-    }
+    this.Inter = setInterval(() => {
+      this.tickFunc();
+    }, 1000);
   };
 
   pauseTimer = () => {
@@ -44,10 +54,11 @@ export default class Timer extends Component {
 
   tickFunc = () => {
     let { sec, min } = this.state;
-    if (!min && !sec) {
-      clearInterval(this.Inter);
+    if (min <= 0 && sec <= 0) {
+      this.pauseTimer();
       return;
     }
+
     if (sec === 0 || !sec) {
       min = min - 1;
       sec = 60;
@@ -67,7 +78,7 @@ export default class Timer extends Component {
         <button type="button" label="play" className="icon icon-play" onClick={this.startTimer} />
         <button type="button" label="pause" className="icon icon-pause" onClick={this.pauseTimer} />
         <span className="timer-display">
-          {(min < 10 ? '0' : '') + min}:{(sec < 10 ? '0' : '') + sec}
+          {String(min).padStart(2, '0')}:{String(sec).padStart(2, '0')}
         </span>
       </span>
     );
