@@ -1,78 +1,62 @@
-import { Component } from 'react';
+import { useState } from 'react';
 
-export default class NewTaskForm extends Component {
-  state = {
-    text: '',
-    min: '',
-    sec: '',
-    stopTimerDate: '',
+export default function NewTaskForm({ addTask }) {
+  const [text, setText] = useState('');
+  const [newTaskMin, setNewTaskMin] = useState('');
+  const [newTaskSec, setNewTaskSec] = useState('');
+  const [stopTimerDate, setStopTimerDate] = useState('');
+
+  const onValueChange = (e) => {
+    setText(e.target.value);
   };
 
-  onValueChange = (e) => {
-    this.setState({
-      text: e.target.value,
-    });
+  const onMinChange = (e) => {
+    setNewTaskMin(e.target.value);
   };
 
-  onMinChange = (e) => {
-    this.setState({
-      min: e.target.value,
-    });
+  const onSecChange = (e) => {
+    setNewTaskSec(e.target.value);
   };
 
-  onSecChange = (e) => {
-    this.setState({
-      sec: e.target.value,
-    });
-  };
-
-  handleFormSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    const { addTask } = this.props;
-    const { text, min, sec } = this.state;
 
-    addTask(text, Number(min), Number(sec));
-    this.setState({
-      text: '',
-      min: '',
-      sec: '',
-      stopTimerDate: '',
-    });
+    addTask(text, Number(newTaskMin), Number(newTaskSec));
+    setText('');
+    setNewTaskMin('');
+    setNewTaskSec('');
+    setStopTimerDate(stopTimerDate);
   };
 
-  render() {
-    const { text, min, sec } = this.state;
+  return (
+    <header className="header">
+      <form onSubmit={handleFormSubmit}>
+        <input
+          className="new-todo"
+          placeholder="What needs to be done?"
+          autoFocus
+          onChange={onValueChange}
+          value={text}
+        />
 
-    return (
-      <header className="header">
-        <form onSubmit={this.handleFormSubmit}>
-          <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            autoFocus
-            onChange={this.onValueChange}
-            value={text}
-          />
+        <input
+          type="number"
+          className="new-todo-form__timer"
+          placeholder="Min"
+          value={newTaskMin}
+          onChange={onMinChange}
+        />
 
-          <input
-            type="number"
-            className="new-todo-form__timer"
-            placeholder="Min"
-            value={min}
-            onChange={this.onMinChange}
-          />
+        <input
+          type="number"
+          className="new-todo-form__timer"
+          placeholder="Sec"
+          value={newTaskSec}
+          onChange={onSecChange}
+        />
 
-          <input
-            type="number"
-            className="new-todo-form__timer"
-            placeholder="Sec"
-            value={sec}
-            onChange={this.onSecChange}
-          />
-
-          <button type="submit" hidden />
-        </form>
-      </header>
-    );
-  }
+        <button type="submit" hidden />
+      </form>
+    </header>
+  );
 }

@@ -1,86 +1,82 @@
-import React, { Component } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-export default class Timer extends Component {
-  state = {
-    min: 0,
-    sec: 0,
-    run: false,
+export default function Timer({ min, sec, stopTimerDate, onTimerUnmount }) {
+  const [timer, setTimer] = useState({ min, sec, run: false });
+  const { run } = timer;
+  const InterRef = useRef(null);
+
+  const startTimer = () => {
+    setTimer((prevTimer) => ({
+      ...prevTimer,
+      run: true,
+    }));
   };
 
-  componentDidMount() {
-    const { min, sec, stopTimerDate } = this.props;
+  const pauseTimer = () => {
+    setTimer((prevTimer) => ({
+      ...prevTimer,
+      run: false,
+    }));
+  };
+
+  const tickFunc = () => {
+    setTimer((prevTimer) => {
+      let { sec, min, run } = prevTimer;
+
+      if (min <= 0 && sec <= 0) {
+        run = false;
+      } else if (sec === 0 || !sec) {
+        min = min - 1;
+        sec = 60;
+      }
+      sec = sec - 1;
+      return { sec, min, run };
+    });
+  };
+
+  useEffect(() => {
+    if (run) {
+      InterRef.current = setInterval(tickFunc, 1000);
+    }
+    return () => {
+      clearInterval(InterRef.current);
+    };
+  }, [run]);
+
+  useEffect(() => {
     if (stopTimerDate && (min || sec)) {
+      // console.log(stopTimerDate)
       const diffDate = new Date(Date.now() - stopTimerDate);
       const diffMin = diffDate.getMinutes();
       const diffSec = diffDate.getSeconds();
-      this.setState({
+
+      setTimer((prevTimer) => ({
+        ...prevTimer,
         run: true,
         min: Math.max(min - diffMin, 0),
         sec: Math.max(sec - diffSec, 0),
-      });
-      this.startTimer();
+      }));
     } else {
-      this.setState({
+      // console.log(min, sec, 'useEff 1')
+      setTimer((prevTimer) => ({
+        ...prevTimer,
         min,
         sec,
-      });
-    }
-  }
-
-  componentWillUnmount() {
-    const { min, sec } = this.state;
-    clearInterval(this.Inter);
-    this.props.onTimerUnmount({
-      min,
-      sec,
-      stopTimerDate: this.state.run ? Date.now() : '',
-    });
-  }
-
-  startTimer = () => {
-    this.Inter = setInterval(() => {
-      this.tickFunc();
-    }, 1000);
-  };
-
-  pauseTimer = () => {
-    if (this.Inter) {
-      clearInterval(this.Inter);
-    }
-    this.setState({
-      run: false,
-    });
-  };
-
-  tickFunc = () => {
-    let { sec, min } = this.state;
-    if (min <= 0 && sec <= 0) {
-      this.pauseTimer();
-      return;
+      }));
     }
 
-    if (sec === 0 || !sec) {
-      min = min - 1;
-      sec = 60;
-    }
-    sec = sec - 1;
-    this.setState({
-      sec,
-      min,
-      run: true,
-    });
-  };
+    return () => {
+      onTimerUnmount(timer, stopTimerDate);
+    };
+  }, []);
 
-  render() {
-    const { min, sec } = this.state;
-    return (
-      <span className="description">
-        <button type="button" label="play" className="icon icon-play" onClick={this.startTimer} />
-        <button type="button" label="pause" className="icon icon-pause" onClick={this.pauseTimer} />
-        <span className="timer-display">
-          {String(min).padStart(2, '0')}:{String(sec).padStart(2, '0')}
-        </span>
+  return (
+    <span className="description">
+      <button type="button" label="play" className="icon icon-play" onClick={startTimer} />
+      <button type="button" label="pause" className="icon icon-pause" onClick={pauseTimer} />
+      <span className="timer-display">
+        {String(timer.min).padStart(2, '0')}:{String(timer.sec).padStart(2, '0')}
       </span>
-    );
-  }
+    </span>
+  );
 }
