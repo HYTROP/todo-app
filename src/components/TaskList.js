@@ -9,15 +9,14 @@ export default function TaskList({
   taskClassName,
   saveTimerValueById,
 }) {
+  // console.log(data)
   const elements = data.map((item) => {
     return (
       <Task
         {...item}
         key={item.id}
         taskClassName={taskClassName}
-        data
         handleOnDelete={() => handleOnDelete(item.id)}
-        addTask
         handleIsDone={handleIsDone}
         handleEditTask={handleEditTask}
         handleOnEdit={handleOnEdit}

@@ -2,8 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function Timer({ min, sec, stopTimerDate, onTimerUnmount }) {
   const [timer, setTimer] = useState({ min, sec, run: false });
+  // setInterval(() => console.log(timer), 1000)
   const { run } = timer;
-  const InterRef = useRef(null);
+  // const run = timer.run;
+  const interRef = useRef();
+  const timerRef = useRef();
+  timerRef.current = timer;
 
   const startTimer = () => {
     setTimer((prevTimer) => ({
@@ -25,6 +29,7 @@ export default function Timer({ min, sec, stopTimerDate, onTimerUnmount }) {
 
       if (min <= 0 && sec <= 0) {
         run = false;
+        return { sec, min, run };
       } else if (sec === 0 || !sec) {
         min = min - 1;
         sec = 60;
@@ -36,16 +41,17 @@ export default function Timer({ min, sec, stopTimerDate, onTimerUnmount }) {
 
   useEffect(() => {
     if (run) {
-      InterRef.current = setInterval(tickFunc, 1000);
+      interRef.current = setInterval(tickFunc, 1000); //Okok
     }
     return () => {
-      clearInterval(InterRef.current);
+      clearInterval(interRef.current); //okok
     };
   }, [run]);
 
   useEffect(() => {
+    //
+
     if (stopTimerDate && (min || sec)) {
-      // console.log(stopTimerDate)
       const diffDate = new Date(Date.now() - stopTimerDate);
       const diffMin = diffDate.getMinutes();
       const diffSec = diffDate.getSeconds();
@@ -56,17 +62,11 @@ export default function Timer({ min, sec, stopTimerDate, onTimerUnmount }) {
         min: Math.max(min - diffMin, 0),
         sec: Math.max(sec - diffSec, 0),
       }));
-    } else {
-      // console.log(min, sec, 'useEff 1')
-      setTimer((prevTimer) => ({
-        ...prevTimer,
-        min,
-        sec,
-      }));
     }
 
     return () => {
-      onTimerUnmount(timer, stopTimerDate);
+      const stopDate = timerRef.current.run ? Date.now() : '';
+      onTimerUnmount(timerRef.current, stopDate);
     };
   }, []);
 

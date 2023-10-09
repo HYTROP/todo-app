@@ -15,6 +15,7 @@ export default function App() {
     if (inputText.trim() === '') {
       return false;
     }
+
     const newItem = {
       label: inputText,
       min: min,
@@ -25,6 +26,7 @@ export default function App() {
       timeStamp: new Date(),
       stopTimerDate: '',
     };
+
     setTaskData((prevState) => [...prevState, newItem]);
   };
 
@@ -95,6 +97,7 @@ export default function App() {
 
   const saveTimerValueById = (id, min, sec, stopTimerDate) => {
     const newTasksData = [...tasksData];
+    console.log(tasksData);
     const index = tasksData.findIndex((e) => e.id === id);
     if (index !== -1) {
       newTasksData[index].min = min;

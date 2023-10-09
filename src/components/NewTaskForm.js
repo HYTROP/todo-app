@@ -4,7 +4,6 @@ export default function NewTaskForm({ addTask }) {
   const [text, setText] = useState('');
   const [newTaskMin, setNewTaskMin] = useState('');
   const [newTaskSec, setNewTaskSec] = useState('');
-  const [stopTimerDate, setStopTimerDate] = useState('');
 
   const onValueChange = (e) => {
     setText(e.target.value);
@@ -25,7 +24,6 @@ export default function NewTaskForm({ addTask }) {
     setText('');
     setNewTaskMin('');
     setNewTaskSec('');
-    setStopTimerDate(stopTimerDate);
   };
 
   return (

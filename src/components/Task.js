@@ -18,6 +18,17 @@ export default function Task({
   saveTimerValueById,
   stopTimerDate,
 }) {
+  let isTaskDeletedOrEdited = false;
+  const onDelete = () => {
+    isTaskDeletedOrEdited = true;
+    handleOnDelete(id);
+  };
+
+  const oneEdit = () => {
+    isTaskDeletedOrEdited = true;
+    handleOnEdit(id, label);
+  };
+
   if (isEditing) {
     taskClassName = 'editing';
     return (
@@ -42,9 +53,10 @@ export default function Task({
     );
   }
 
-  const onTimerUnmount = ({ min, sec, stopTimerDate }) => {
-    console.log(min, sec, stopTimerDate);
-    saveTimerValueById(id, min, sec, stopTimerDate);
+  const onTimerUnmount = ({ min, sec }, stopTimerDate) => {
+    if (!isTaskDeletedOrEdited) {
+      saveTimerValueById(id, min, sec, stopTimerDate);
+    }
   };
 
   return (
@@ -62,7 +74,7 @@ export default function Task({
         <label id={id}>
           <span className="title">{label}</span>
           <div className="timer">
-            {(min === 0 && sec === 0) || min < 0 || sec < 0 ? null : (
+            {min === 0 && sec === 0 ? null : (
               <Timer min={min} sec={sec} onTimerUnmount={onTimerUnmount} stopTimerDate={stopTimerDate} />
             )}
           </div>
@@ -72,13 +84,8 @@ export default function Task({
             {formatDistanceToNow(timeStamp, { includeSeconds: true })} ago
           </span>
 
-          <button
-            className="icon icon-edit"
-            onClick={() => {
-              handleOnEdit(id, label);
-            }}
-          ></button>
-          <button className="icon icon-destroy" onClick={handleOnDelete}></button>
+          <button className="icon icon-edit" onClick={oneEdit}></button>
+          <button className="icon icon-destroy" onClick={onDelete}></button>
         </label>
       </div>
     </li>
